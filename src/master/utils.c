@@ -450,7 +450,6 @@ int write_json_long_to_file(int fd, json_value *value)
 
 int write_json_string_to_file(int fd, json_value *value)
 {
-    printf("str: %s\n", value->string);
     char c;
     write(fd, "\"", 1);
     for (int i = 0; value->string[i] != '\0'; i++)

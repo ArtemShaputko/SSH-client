@@ -255,8 +255,6 @@ int json_create_key_object(ssh_session session, json_value *object)
         fprintf(stderr, "Cannot export key\n");
         return -1;
     }
-    printf("key : %s\n", object->object[0].value.string);
-    printf("value : %s\n", object->object[1].value.string);
     return 0;
 }
 

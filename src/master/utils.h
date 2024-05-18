@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <limits.h>
+#include <stddef.h>
 
 #define KNOWN_HOSTS_FILE ".sc/known_hosts"
 

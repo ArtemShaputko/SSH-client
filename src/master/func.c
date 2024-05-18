@@ -38,7 +38,35 @@ cmd_options parse_cmd_options(int argc, char *argv[])
             break;
         }
     }
+    if (options.key_file != NULL)
+    {
+        if (options.key_file[0] == '~')
+        {
+            set_home_host_file(&options.key_file[2]);
+        }
+        else
+        {
+            strcpy(known_hosts_file_full_path, options.key_file);
+        }
+    }
+    else
+    {
+        set_home_host_file(KNOWN_HOSTS_FILE);
+    }
     return options;
+}
+
+void set_home_host_file(const char *path)
+{
+    char *home = getenv("HOME");
+    if (home == NULL || strcmp(home, "/root") == 0)
+    {
+        snprintf(known_hosts_file_full_path, PATH_MAX, "/%s", path);
+    }
+    else
+    {
+        snprintf(known_hosts_file_full_path, PATH_MAX, "%s/%s", home, path);
+    }
 }
 
 void print_usage()
