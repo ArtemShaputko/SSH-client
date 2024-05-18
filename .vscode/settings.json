@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "types.h": "c",
+        "client.h": "c",
+        "inet.h": "c",
+        "unistd.h": "c",
+        "socket.h": "c",
+        "stdio.h": "c",
+        "in.h": "c",
+        "libssh.h": "c",
+        "utils.h": "c",
+        "fcntl.h": "c",
+        "functional": "c",
+        "mman.h": "c",
+        "array": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "stdlib.h": "c",
+        "param.h": "c",
+        "func.h": "c"
+    }
+}
