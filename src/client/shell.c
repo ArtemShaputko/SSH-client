@@ -92,14 +92,14 @@ int interactive_shell_session(ssh_session session, ssh_channel channel)
 {
     char buffer[256];
     int nbytes, nwritten;
+    struct timeval timeout;
+    ssh_channel in_channels[2], out_channels[2];
+    fd_set fds;
+    int maxfd;
 
     while (ssh_channel_is_open(channel) &&
            !ssh_channel_is_eof(channel))
     {
-        struct timeval timeout;
-        ssh_channel in_channels[2], out_channels[2];
-        fd_set fds;
-        int maxfd;
 
         timeout.tv_sec = 30;
         timeout.tv_usec = 0;
