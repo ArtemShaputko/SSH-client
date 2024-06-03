@@ -114,11 +114,11 @@ int json_is_server_known(ssh_session session, json_value *known_hosts)
     char *host_name;
     if (ssh_get_server_publickey(session, &server_key) < 0)
     {
-        return SSH_SERVER_ERROR;
+        return SSH_KNOWN_HOSTS_ERROR;
     }
     if (known_hosts->type == JSON_NONE)
     {
-        return SSH_SERVER_FILE_NOT_FOUND;
+        return SSH_KNOWN_HOSTS_NOT_FOUND;
     }
     ssh_options_get(session, SSH_OPTIONS_HOST, &host_name);
     ret = json_object_find_value(known_hosts, host_name, &known_keys);
@@ -127,20 +127,20 @@ int json_is_server_known(ssh_session session, json_value *known_hosts)
     case -1:
         return JSON_PARSE_ERROR;
     case -2:
-        return SSH_SERVER_NOT_KNOWN;
+        return SSH_KNOWN_HOSTS_UNKNOWN;
     default:
     {
         ret = json_array_data_exists(&known_keys, json_publickey_find, (void *)&server_key);
         switch (ret)
         {
         case 0:
-            return SSH_SERVER_KNOWN_OK;
+            return SSH_KNOWN_HOSTS_OK;
         case -1:
             return JSON_PARSE_ERROR;
         case -2:
-            return SSH_SERVER_FOUND_OTHER;
+            return SSH_KNOWN_HOSTS_CHANGED;
         default:
-            return SSH_SERVER_KNOWN_CHANGED;
+            return SSH_KNOWN_HOSTS_OTHER;
         }
     }
     }
@@ -178,10 +178,10 @@ int verify_server(ssh_session session)
     case JSON_PARSE_ERROR:
         fprintf(stderr, "Problems with parsing file\n");
         break;
-    case SSH_SERVER_KNOWN_OK:
+    case SSH_KNOWN_HOSTS_OK:
         break;
 
-    case SSH_SERVER_KNOWN_CHANGED:
+    case SSH_KNOWN_HOSTS_CHANGED:
         fprintf(stderr, "Host key for server changed: it is now:\n");
         printf("Public key hash ");
         ssh_print_hash(type, hash, hash_len);
@@ -191,7 +191,7 @@ int verify_server(ssh_session session)
         free_json_value(&known_hosts);
         return -1;
 
-    case SSH_SERVER_FOUND_OTHER:
+    case SSH_KNOWN_HOSTS_OTHER:
         fprintf(stderr, "The host key for this server was not found but an other"
                         "type of key exists.\n");
         fprintf(stderr, "An attacker might change the default server key to"
@@ -200,7 +200,7 @@ int verify_server(ssh_session session)
         free(hash);
         return -1;
 
-    case SSH_SERVER_FILE_NOT_FOUND:
+    case SSH_KNOWN_HOSTS_NOT_FOUND:
         fprintf(stderr, "Could not find known host file.\n");
         fprintf(stderr, "If you accept the host key here, the file will be"
                         "automatically created.\n");
@@ -212,7 +212,7 @@ int verify_server(ssh_session session)
         }
         break;
 
-    case SSH_SERVER_NOT_KNOWN:
+    case SSH_KNOWN_HOSTS_UNKNOWN:
         if (write_server_hash(session, hash, hash_len, &known_hosts) < 0)
         {
             free_json_value(&known_hosts);
@@ -221,7 +221,7 @@ int verify_server(ssh_session session)
         }
         break;
 
-    case SSH_SERVER_ERROR:
+    case SSH_KNOWN_HOSTS_ERROR:
         fprintf(stderr, "Error %s", ssh_get_error(session));
         free(hash);
         free_json_value(&known_hosts);

@@ -8,6 +8,8 @@
 #include <getopt.h>
 #include "func.h"
 
+int enableX11 = 0;
+
 cmd_options parse_cmd_options(int argc, char *argv[])
 {
     int opt;
@@ -26,7 +28,7 @@ cmd_options parse_cmd_options(int argc, char *argv[])
     size_t size = (size_t)(second_str - argv[1]) > 20 ? 20 : (size_t)(second_str - argv[1]);
     strncpy(options.user_name, argv[1], size);
     strncpy(options.host_ip, second_str + 1, 20);
-    while ((opt = getopt(argc, argv, "p:k:")) != -1)
+    while ((opt = getopt(argc, argv, "p:k:X")) != -1)
     {
         switch (opt)
         {
@@ -35,6 +37,10 @@ cmd_options parse_cmd_options(int argc, char *argv[])
             break;
         case 'k':
             options.key_file = optarg;
+            break;
+        case 'X':
+            options.x11enable = 1;
+            enableX11 = 1;
             break;
         }
     }
@@ -74,5 +80,5 @@ void print_usage()
     fprintf(stderr,
             "Usage: sc [user]@[server ip]\n"
             "          [-p port][-h host][-u user]\n"
-            "          [-k key_file]\n");
+            "          [-k key_file][-X]\n");
 }

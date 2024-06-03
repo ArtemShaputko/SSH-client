@@ -18,6 +18,7 @@
         "utility": "c",
         "stdlib.h": "c",
         "param.h": "c",
-        "func.h": "c"
+        "func.h": "c",
+        "shell.h": "c"
     }
 }

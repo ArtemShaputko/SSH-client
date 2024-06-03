@@ -33,10 +33,12 @@ typedef struct json_pair_type json_pair;
 /* Должна возвращать 0, если найден, -1 если нет и >0 - пользовательские варианты*/
 typedef int(json_find)(json_value *v, void *user_data);
 
+// Возвращает -1, если ошибка, -2 если не найден и >= 0 при совпадении
 int json_array_data_exists(const json_value *array, json_find *cmp, void *user_data);
+// Возвращает -1, если ошибка, -2 если не найден и >= 0, если ключ найден и записывает в object значение
 int json_object_find_value(const json_value *object, const char *key, json_value *value);
-int parse_json_file(const char *filename, json_value *result);
 
+int parse_json_file(const char *filename, json_value *result);
 const char *skip_whtespace(const char *str, size_t *len);
 const char *parse_json_value(const char *str, size_t *len, json_value *value);
 const char *parse_json_number(const char *str, size_t *len, json_value *value);
@@ -64,6 +66,7 @@ struct cmd_options_type
     char user_name[20];
     char *port;
     char *key_file;
+    int x11enable;
 };
 
 struct json_value_type

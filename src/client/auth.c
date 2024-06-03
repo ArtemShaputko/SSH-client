@@ -29,7 +29,7 @@ int log_in_password(ssh_session session)
     char *password;
     int auth_result;
 
-    password = getpass("Enter your password: ");
+    password = getpass("Enter password: ");
     auth_result = ssh_userauth_password(session, NULL, password);
     if (auth_result != SSH_AUTH_SUCCESS)
     {

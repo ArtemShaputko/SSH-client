@@ -53,7 +53,7 @@ int json_object_find_value(const json_value *object, const char *key, json_value
 int parse_json_file(const char *filename, json_value *result)
 {
     char *content;
-    int fd = open(filename, O_RDWR | O_CREAT, 0666);
+    int fd = open(filename, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (fd < 0)
     {
         perror("open:");
@@ -365,7 +365,7 @@ void free_json_value(json_value *value)
 
 int write_json_to_file(const char *filename, json_value *value)
 {
-    int fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
+    int fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     int level = 0;
     int res = write_json_value_to_file(fd, value, level);
     close(fd);
